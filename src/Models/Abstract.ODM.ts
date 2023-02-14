@@ -27,9 +27,9 @@ abstract class AbstractODM<T> {
   }
 
   public async update(id: string, obj: Partial<T>):
-  Promise<T | null> {
+  Promise<T | null | undefined> {
     if (!isValidObjectId(id)) {
-      return null;
+      return undefined;
     }
     return this.model.findByIdAndUpdate(
       { _id: id },

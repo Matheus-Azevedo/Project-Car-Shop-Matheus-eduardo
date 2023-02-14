@@ -30,6 +30,15 @@ class CarService {
     }
     return this.createCarDomain(car);
   }
+
+  public async update(id: string, car: ICar): Promise<Car | null | undefined> {
+    const carODM = new CarODM();
+    const updatedCar = await carODM.update(id, car);
+    if (updatedCar === undefined) {
+      return undefined;
+    }
+    return this.createCarDomain(updatedCar);
+  }
 }
 
 export default CarService;
