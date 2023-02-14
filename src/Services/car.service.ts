@@ -39,6 +39,15 @@ class CarService {
     }
     return this.createCarDomain(updatedCar);
   }
+
+  public async delete(id: string): Promise<Car | null | undefined> {
+    const carODM = new CarODM();
+    const deletedCar = await carODM.delete(id);
+    if (deletedCar === undefined) {
+      return undefined;
+    }
+    return this.createCarDomain(deletedCar);
+  }
 }
 
 export default CarService;

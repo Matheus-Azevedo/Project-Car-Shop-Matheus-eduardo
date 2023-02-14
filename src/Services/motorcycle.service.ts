@@ -39,6 +39,15 @@ class MotorcycleService {
     }
     return this.createMotorcycleDomain(updatedMotorcycle);
   }
+
+  public async delete(id: string): Promise<Motorcycle | null | undefined> {
+    const motorcycleODM = new MotorcycleODM();
+    const deletedMotorcycle = await motorcycleODM.delete(id);
+    if (deletedMotorcycle === undefined) {
+      return undefined;
+    }
+    return this.createMotorcycleDomain(deletedMotorcycle);
+  }
 }
 
 export default MotorcycleService;

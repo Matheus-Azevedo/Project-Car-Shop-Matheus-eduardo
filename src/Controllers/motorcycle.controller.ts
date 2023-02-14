@@ -3,6 +3,10 @@ import IMotorcycle from '../Interfaces/IMotorcycle';
 import MotorcycleService from '../Services/motorcycle.service';
 import HttpStatusCode from '../utils/HTTP_STATUS_CODE';
 
+// Constants
+const MOTORCYCLE_NOT_FOUND = 'Motorcycle not found';
+const INVALID_MONGO_ID = 'Invalid mongo id';
+
 class MotorcycleController {
   private req: Request;
   private res: Response;
@@ -47,12 +51,12 @@ class MotorcycleController {
     try {
       const motorcycle = await this.service.getById(this.req.params.id);
       if (motorcycle === null) {
-        return this.res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Motorcycle not found' });
+        return this.res.status(HttpStatusCode.NOT_FOUND).json({ message: MOTORCYCLE_NOT_FOUND });
       }
       if (motorcycle === undefined) {
         return this.res
           .status(HttpStatusCode.UNPROCESSABLE_ENTITY)
-          .json({ message: 'Invalid mongo id' });
+          .json({ message: INVALID_MONGO_ID });
       }
       return this.res.status(HttpStatusCode.OK).json(motorcycle);
     } catch (error) {
@@ -74,14 +78,31 @@ class MotorcycleController {
     try {
       const updatedMotorcycle = await this.service.update(id, motorcycle);
       if (updatedMotorcycle === null) {
-        return this.res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Motorcycle not found' });
+        return this.res.status(HttpStatusCode.NOT_FOUND).json({ message: MOTORCYCLE_NOT_FOUND });
       }
       if (updatedMotorcycle === undefined) {
         return this.res
           .status(HttpStatusCode.UNPROCESSABLE_ENTITY)
-          .json({ message: 'Invalid mongo id' });
+          .json({ message: INVALID_MONGO_ID });
       }
       return this.res.status(HttpStatusCode.OK).json(updatedMotorcycle);
+    } catch (error) {
+      return this.next(error);
+    }
+  }
+
+  public async delete() {
+    try {
+      const deletedMotorcycle = await this.service.delete(this.req.params.id);
+      if (deletedMotorcycle === null) {
+        return this.res.status(HttpStatusCode.NOT_FOUND).json({ message: MOTORCYCLE_NOT_FOUND });
+      }
+      if (deletedMotorcycle === undefined) {
+        return this.res
+          .status(HttpStatusCode.UNPROCESSABLE_ENTITY)
+          .json({ message: INVALID_MONGO_ID });
+      }
+      return this.res.status(HttpStatusCode.OK).json(deletedMotorcycle);
     } catch (error) {
       return this.next(error);
     }
