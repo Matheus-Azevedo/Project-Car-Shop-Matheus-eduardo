@@ -33,6 +33,32 @@ class CarController {
       return this.next(error);
     }
   }
+
+  public async getAll() {
+    try {
+      const cars = await this.service.getAll();
+      return this.res.status(HttpStatusCode.OK).json(cars);
+    } catch (error) {
+      return this.next(error);
+    }
+  }
+
+  public async getById() {
+    try {
+      const car = await this.service.getById(this.req.params.id);
+      if (car === null) {
+        return this.res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Car not found' });
+      }
+      if (car === undefined) {
+        return this.res
+          .status(HttpStatusCode.UNPROCESSABLE_ENTITY)
+          .json({ message: 'Invalid mongo id' });
+      }
+      return this.res.status(HttpStatusCode.OK).json(car);
+    } catch (error) {
+      return this.next(error);
+    }
+  }
 }
 
 export default CarController;
